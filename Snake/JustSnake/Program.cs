@@ -26,9 +26,13 @@ class MainGameCode
         Console.BufferWidth = Console.WindowWidth = 60;
         
         Random randomGenerator = new Random();
+        List<Position> obstacle = new List<Position>();
 
         Menu();
 
+        printOobstacles(level, obstacle);
+        
+        
         Position[] directions = new Position[] 
         {
             new Position(1,0), //right
@@ -87,7 +91,7 @@ class MainGameCode
             Position snakeNewHead = new Position(snakeHead.X + directions[direction].X, snakeHead.Y + directions[direction].Y);
 
             if (snakeNewHead.X > Console.WindowWidth - 1 || snakeNewHead.X < 0 ||
-                snakeNewHead.Y < 5 || snakeNewHead.Y > Console.WindowHeight - 1 || snakeElements.Contains(snakeNewHead))
+                snakeNewHead.Y < 5 || snakeNewHead.Y > Console.WindowHeight - 1 || snakeElements.Contains(snakeNewHead)||obstacle.Contains(snakeNewHead))
             {
                 PrintData(29, 15, "Game Over!", ConsoleColor.Yellow);
                 Console.WriteLine();
@@ -99,20 +103,64 @@ class MainGameCode
             snakeElements.Dequeue();
 
             Console.Clear();
+            printOobstacles(level, obstacle);
 
             foreach (Position position in snakeElements)
             {
                 PrintSnake(position.X, position.Y, '\U000025A1');
             }
-            PrintData(0, 0, new string('-', 59));
-            PrintData(4, 2, level.ToString(), ConsoleColor.Yellow);
+            PrintData(0, 0,"-----------------------------------------------------------");
+            PrintData(2, 2, ("Level: "+level.ToString()), ConsoleColor.Yellow);
             PrintData(25, 2, "JUST SNAKE", ConsoleColor.Red);
-            PrintData(0, 4, new string('-', 59));
+            PrintData(0, 4,"-----------------------------------------------------------");
             Thread.Sleep(150);
 
         }
     }
+    static void printOobstacles(int level, List<Position> obstacle, ConsoleColor color = ConsoleColor.Green)
+    {
 
+        if (level >=1)
+        {
+            for (int i = 12; i < 19; i++)
+            {
+                obstacle.Add(new Position(9, i));
+            }
+            for (int i = 12; i < 19; i++)
+            {
+                Console.SetCursorPosition(9, i);
+                Console.Write("x");
+            }
+            for (int i = 112; i < 19; i++)
+            {
+                obstacle.Add(new Position(51, i));
+            }
+            for (int i = 12; i < 19; i++)
+            {
+                Console.SetCursorPosition(51, i);
+                Console.Write("x");
+            }
+        }
+        if (level  >=2)
+        {
+            for (int i = 21; i < 39; i++)
+            {
+                obstacle.Add(new Position(i, 8));
+            }
+            
+                Console.SetCursorPosition(21, 8);
+                Console.Write("xxxxxxxxxxxxxxxxxx");
+            
+            for (int i = 21; i < 39; i++)
+            {
+                obstacle.Add(new Position(i, 22));
+            }
+            
+                Console.SetCursorPosition(21, 22);
+                Console.Write("xxxxxxxxxxxxxxxxxx");
+            
+        }
+    }
     
     static void PrintData(int x, int y, string str, ConsoleColor color = ConsoleColor.Green)
     {
