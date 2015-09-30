@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading;
 
@@ -33,6 +34,8 @@
         private static Queue<Position> snakeElements = new Queue<Position>();
 
         private static List<string> leaderboard = new List<string>();   // Leaderboard List
+        
+        private static string filePath = "../../file.md";
 
         private static string[] options = { "New Game", "HighScores", "Choose Difficulty", "Quit" };
 
@@ -387,7 +390,23 @@
         /// </summary>
         private static void LoadFile()
         {
+            if (!File.Exists(filePath))
+            {
+                FileStream fileStream = File.Create(filePath);
+                fileStream.Close();
+            }
 
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                string line = reader.ReadLine();
+
+                while (line != null)
+                {
+                    leaderboard.Add(line);
+
+                    line = reader.ReadLine();
+                }
+            }
         }
 
         /// <summary>
@@ -395,7 +414,14 @@
         /// </summary>
         private static void SaveFile()
         {
-
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                for (int i = 0; i < leaderboard.Count; i++)
+                {
+                    writer.Write(leaderboard[i]);
+                    writer.WriteLine();
+                }
+            }
         }
     }
 }
