@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 
 struct Position
@@ -14,19 +15,19 @@ struct Position
     }
 }
 
-class Program
+class MainGameCode
 {
+    static int level = 1;
+
     static void Main()
     {
-
-        Console.BufferHeight = Console.WindowHeight = 30;
-        Console.BufferWidth = Console.WindowWidth = 70;
-
+        Console.OutputEncoding = System.Text.Encoding.Unicode;
+        Console.BufferHeight = Console.WindowHeight = 25;
+        Console.BufferWidth = Console.WindowWidth = 60;
+        
         Random randomGenerator = new Random();
 
-        PrintData(0, 0, "----------------------------------------------------------------------");
-        PrintData(29, 2, "JUST SNAKE", ConsoleColor.Red);
-        PrintData(0, 4, "----------------------------------------------------------------------");
+        Menu();
 
         Position[] directions = new Position[] 
         {
@@ -101,15 +102,18 @@ class Program
 
             foreach (Position position in snakeElements)
             {
-                PrintSnake(position.X, position.Y, 'o');
+                PrintSnake(position.X, position.Y, '\U000025A1');
             }
-            PrintData(0, 0, "----------------------------------------------------------------------");
-            PrintData(29, 2, "JUST SNAKE", ConsoleColor.Red);
-            PrintData(0, 4, "----------------------------------------------------------------------");
+            PrintData(0, 0, new string('-', 59));
+            PrintData(4, 2, level.ToString(), ConsoleColor.Yellow);
+            PrintData(25, 2, "JUST SNAKE", ConsoleColor.Red);
+            PrintData(0, 4, new string('-', 59));
             Thread.Sleep(150);
 
         }
     }
+
+    
     static void PrintData(int x, int y, string str, ConsoleColor color = ConsoleColor.Green)
     {
         Console.SetCursorPosition(x, y);
@@ -122,4 +126,134 @@ class Program
         Console.ForegroundColor = ConsoleColor.White;
         Console.Write(snakeBody);
     }
+    static void Menu()
+    {
+        int currentSelection = 0;
+        while (true)
+        {
+            PrintData(0, 0, new string('-', 59), ConsoleColor.Magenta);
+            PrintData(0, 24, new string('-', 59), ConsoleColor.DarkMagenta);            
+            int printPosition = 10;
+            string[] options = { "New Game", "HighScores", "Choose Difficulty", "Quit" };
+            PrintData(15, printPosition + currentSelection, "> ", ConsoleColor.White);
+
+            foreach (var i in options)
+            {
+                PrintData(17, printPosition, i, ConsoleColor.White);
+                printPosition++;
+            }
+            ConsoleKeyInfo keyPressed = Console.ReadKey();
+
+            if (keyPressed.Key == ConsoleKey.DownArrow)
+            {
+                PrintData(15, 10 + currentSelection, " ", ConsoleColor.White);
+                currentSelection++;
+                if (currentSelection > options.Length - 1)
+                {
+                    currentSelection = 0;
+                }
+            }
+            else if (keyPressed.Key == ConsoleKey.UpArrow)
+            {
+                PrintData(15, 10 + currentSelection, " ", ConsoleColor.White);
+                currentSelection--;
+                if (currentSelection < 0)
+                {
+                    currentSelection = 3;
+                }
+            }
+            else if (keyPressed.Key == ConsoleKey.Enter)
+            {
+                if (currentSelection == 0)
+                {
+                    return;
+                }
+                else if (currentSelection == 1)
+                {
+                    //DisplayHighscores();
+                }
+                else if (currentSelection == 2)
+                {
+                    Console.Clear();
+                    LevelsMenu();
+                }
+                else if (currentSelection == 3)
+                {
+                    Environment.Exit(0);
+                }
+            }
+        }
+    }
+
+    static void LevelsMenu()
+    {
+        int currentSelection = 0;
+        level = 1;
+        while (true)
+        {
+            PrintData(0, 0, new string('-', 59), ConsoleColor.Magenta);
+            PrintData(0, 24, new string('-', 59), ConsoleColor.DarkMagenta);
+            int printPosition = 10;
+            string[] options = { "Level 1", "Level 2", "Level 3", "Level 4", "Return" };
+            PrintData(15, printPosition + currentSelection, "> ", ConsoleColor.White);
+
+            foreach (var i in options)
+            {
+                PrintData(17, printPosition, i, ConsoleColor.White);
+                printPosition++;
+            }
+            ConsoleKeyInfo keyPressed = Console.ReadKey();
+
+            if (keyPressed.Key == ConsoleKey.DownArrow)
+            {
+                PrintData(15, 10 + currentSelection, " ", ConsoleColor.White);
+                currentSelection++;
+                if (currentSelection > options.Length - 1)
+                {
+                    currentSelection = 0;
+                }
+            }
+            else if (keyPressed.Key == ConsoleKey.UpArrow)
+            {
+                PrintData(15, 10 + currentSelection, " ", ConsoleColor.White);
+                currentSelection--;
+                if (currentSelection < 0)
+                {
+                    currentSelection = 4;
+                }
+            }
+            else if (keyPressed.Key == ConsoleKey.Enter)
+            {
+                if (currentSelection == 0)
+                {
+                    Console.Clear();
+                    return;
+                }
+                else if (currentSelection == 1)
+                {
+                    level++;
+                    Console.Clear();
+                    return;
+                }
+                else if (currentSelection == 2)
+                {
+                    level+=2;
+                    Console.Clear();
+                    return;
+                }
+                else if (currentSelection == 3)
+                {
+                    level+=3;
+                    Console.Clear();
+                    return;
+                }
+                else if (currentSelection == 4)
+                {
+                    Console.Clear();
+                    return;
+                }
+            }
+        }
+    }
 }
+
