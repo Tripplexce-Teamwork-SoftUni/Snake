@@ -353,8 +353,24 @@
                     direction = 3;
                 }
             }
+            if (command.Key == ConsoleKey.P)
+            {
+                PauseGame();
+            }
 
             return direction;
+        }
+
+        private static void PauseGame()
+        {
+            while (true)
+            {
+                ConsoleKeyInfo unpause = Console.ReadKey();
+                if (unpause.Key == ConsoleKey.P)
+                {
+                    return;
+                }
+            }          
         }
 
         private static void StartSnakeElements()
