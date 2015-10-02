@@ -52,6 +52,7 @@
         private static int upperMenuBorder = 1;
 
         private static int lowerMenuBorder = 28;
+        
 
         private static Position[] directions = new Position[]
         {
@@ -269,7 +270,8 @@
             playerPoints = 0;   // Starting player points
             direction = 0; // 0 right 1 left 2 down 3 up
             StartSnakeElements();
-           
+            Position food = new Position(randomGenerator.Next(0, Console.WindowWidth), randomGenerator.Next(6, Console.WindowHeight - 1));
+            
             while (true)
             {                
                 if (Console.KeyAvailable)
@@ -302,6 +304,14 @@
                 MoveSnake();
                 PrintObstacles(level, obstacle);
 
+                PrintFood(food.X, food.Y, '@', ConsoleColor.Magenta);
+                if (snakeNewHead.X == food.X && snakeNewHead.Y == food.Y)
+                {
+                    food = new Position(randomGenerator.Next(0, Console.WindowWidth), randomGenerator.Next(6, Console.WindowHeight - 1));
+                    PrintFood(food.X, food.Y, '@', ConsoleColor.Magenta);
+                    snakeElements.Enqueue(snakeNewHead);
+                }
+
                 if (level == 1)
                 {
                     Thread.Sleep(sleep);
@@ -320,6 +330,12 @@
                 }
 
             }
+        }
+        static void PrintFood(int x, int y, char symbol, ConsoleColor foodColor = ConsoleColor.Yellow)
+        {
+            Console.SetCursorPosition(x, y);
+            Console.ForegroundColor = foodColor;
+            Console.Write(symbol);
         }
         private static void PrintObstacles(int level, List<Position> obstacle, ConsoleColor color = ConsoleColor.Green)
         {
