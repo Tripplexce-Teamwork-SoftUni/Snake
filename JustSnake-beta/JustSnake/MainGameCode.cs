@@ -333,6 +333,9 @@
             PrintData(0, 0, "Write a name without empty space!");
         }
 
+        /// <summary>
+        /// Sorting Leaderboard Method
+        /// </summary>
         private static void LeaderboardSort()
         {
             int length = leaderboardPoints.Count;
