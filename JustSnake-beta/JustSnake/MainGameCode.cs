@@ -517,7 +517,7 @@ namespace JustSnake
             PrintData(0, 2, string.Format("{0}{1}", new string(' ', windowWidth / 2 - 5),
                 string.Format("{0}", "JUST SNAKE")), ConsoleColor.Red);
             PrintData(4, 2, string.Format("{0}", level.ToString()), ConsoleColor.Yellow);
-            PrintData(45, 2, $"Score: {playerPoints}", ConsoleColor.Green);
+            PrintData(45, 2, "Score: " + playerPoints, ConsoleColor.Green);
             PrintData(0, 4, new string('-', windowWidth));
         }
 
