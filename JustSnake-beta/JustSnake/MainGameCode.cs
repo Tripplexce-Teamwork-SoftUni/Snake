@@ -33,6 +33,8 @@
 
         private static Queue<Position> snakeElements = new Queue<Position>();
 
+        private static List<Position> obstacle = new List<Position>();
+
         private static List<string> leaderboardNames = new List<string>();   // Leaderboard Name List
 
         private static List<int> leaderboardPoints = new List<int>();   // Leaderboard Points List
@@ -265,7 +267,8 @@
             playerPoints = 0;   // Starting player points
             direction = 0; // 0 right 1 left 2 down 3 up
             StartSnakeElements();
-
+           
+            printOobstacles(level, obstacle);
             while (true)
             {                
                 if (Console.KeyAvailable)
@@ -279,7 +282,7 @@
                 Position snakeNewHead = new Position(snakeHead.X + directions[direction].X, snakeHead.Y + directions[direction].Y);
 
                 if (snakeNewHead.X > Console.WindowWidth - 1 || snakeNewHead.X < 0 ||
-                    snakeNewHead.Y < 5 || snakeNewHead.Y > Console.WindowHeight - 1 || snakeElements.Contains(snakeNewHead))
+                    snakeNewHead.Y < 5 || snakeNewHead.Y > Console.WindowHeight - 1 || snakeElements.Contains(snakeNewHead)|| obstacle.Contains(snakeNewHead))
                 {
                     Console.Clear();
                     DeathSound.PlayDeathSound();
@@ -296,10 +299,55 @@
                 snakeElements.Dequeue();
 
                 MoveSnake();
+                printOobstacles(level, obstacle);
+
                 Thread.Sleep(150);
             }
         }
+        private static void printOobstacles(int level, List<Position> obstacle, ConsoleColor color = ConsoleColor.Green)
+        {
 
+            if (level >=2 )
+            {
+                for (int i = 12; i < 19; i++)
+                {
+                    obstacle.Add(new Position(9, i));
+                }
+                for (int i = 12; i < 19; i++)
+                {
+                    Console.SetCursorPosition(9, i);
+                    Console.Write("x");
+                }
+                for (int i = 12; i < 19; i++)
+                {
+                    obstacle.Add(new Position(51, i));
+                }
+                for (int i = 12; i < 19; i++)
+                {
+                    Console.SetCursorPosition(51, i);
+                    Console.Write("x");
+                }
+            }
+            if (level >= 3)
+            {
+                for (int i = 21; i < 39; i++)
+                {
+                    obstacle.Add(new Position(i, 8));
+                }
+
+                Console.SetCursorPosition(21, 8);
+                Console.Write("xxxxxxxxxxxxxxxxxx");
+
+                for (int i = 21; i < 39; i++)
+                {
+                    obstacle.Add(new Position(i, 22));
+                }
+
+                Console.SetCursorPosition(21, 22);
+                Console.Write("xxxxxxxxxxxxxxxxxx");
+
+            }
+        }
         private static void WriteName()
         {
             //Console.Clear();
