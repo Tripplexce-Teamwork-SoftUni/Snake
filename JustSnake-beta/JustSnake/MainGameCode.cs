@@ -302,25 +302,30 @@
                 MoveSnake();
                 PrintObstacles(level, obstacle);
 
-                if (level == 1)
-                {
-                    Thread.Sleep(sleep);
-                }
-                else if (level == 2)
-                {
-                    Thread.Sleep(sleep - 20);
-                }
-                else if (level == 3)
-                {
-                    Thread.Sleep(sleep - 35);
-                }
-                else if (level == 4)
-                {
-                    Thread.Sleep(sleep - 50);
-                }
-
+                GetSpeedOfSnake();
             }
         }
+
+        private static void GetSpeedOfSnake()
+        {
+            if (level == 1)
+            {
+                Thread.Sleep(sleep);
+            }
+            else if (level == 2)
+            {
+                Thread.Sleep(sleep - 20);
+            }
+            else if (level == 3)
+            {
+                Thread.Sleep(sleep - 35);
+            }
+            else if (level == 4)
+            {
+                Thread.Sleep(sleep - 50);
+            }
+        }
+
         private static void PrintObstacles(int level, List<Position> obstacle, ConsoleColor color = ConsoleColor.Green)
         {
 
