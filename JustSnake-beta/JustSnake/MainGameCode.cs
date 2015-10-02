@@ -304,6 +304,7 @@
                 MoveSnake();
                 PrintObstacles(level, obstacle);
 
+<<<<<<< HEAD
                 PrintFood(food.X, food.Y, '@', ConsoleColor.Magenta);
                 if (snakeNewHead.X == food.X && snakeNewHead.Y == food.Y)
                 {
@@ -328,15 +329,41 @@
                 {
                     Thread.Sleep(sleep - 50);
                 }
-
+=======
+                GetSpeedOfSnake();
             }
         }
+>>>>>>> origin/master
+
+        private static void GetSpeedOfSnake()
+        {
+            if (level == 1)
+            {
+                Thread.Sleep(sleep);
+            }
+            else if (level == 2)
+            {
+                Thread.Sleep(sleep - 20);
+            }
+            else if (level == 3)
+            {
+                Thread.Sleep(sleep - 35);
+            }
+            else if (level == 4)
+            {
+                Thread.Sleep(sleep - 50);
+            }
+        }
+<<<<<<< HEAD
         static void PrintFood(int x, int y, char symbol, ConsoleColor foodColor = ConsoleColor.Yellow)
         {
             Console.SetCursorPosition(x, y);
             Console.ForegroundColor = foodColor;
             Console.Write(symbol);
         }
+=======
+
+>>>>>>> origin/master
         private static void PrintObstacles(int level, List<Position> obstacle, ConsoleColor color = ConsoleColor.Green)
         {
 
