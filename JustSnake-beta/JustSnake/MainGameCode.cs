@@ -1,4 +1,7 @@
-﻿namespace JustSnake
+﻿using System.CodeDom;
+using System.Security.Cryptography.X509Certificates;
+
+namespace JustSnake
 {
     using System;
     using System.Collections.Generic;
@@ -39,7 +42,9 @@
 
         private static List<int> leaderboardPoints = new List<int>();   // Leaderboard Points List
 
-        private static int playerPoints;    // Player points 
+        private static int playerPoints = 0;    // Player points 
+
+        private static int oldPlayerPoints = 0;
 
         private static int sleep = 150;
 
@@ -289,7 +294,7 @@
                 {
                     Console.Clear();
                     DeathSound.PlayDeathSound();
-                    PrintData(29, 15, "Game Over!", ConsoleColor.Yellow);
+                    PrintData(22, 15, "Game Over!", ConsoleColor.Yellow);
 
                     Console.WriteLine();
                     WriteName();
@@ -304,36 +309,42 @@
                 MoveSnake();
                 PrintObstacles(level, obstacle);
 
-
-                PrintFood(food.X, food.Y, '@', ConsoleColor.Magenta);
+                if (!snakeElements.Contains(food) && !obstacle.Contains(food))
+                {
+                    PrintFood(food.X, food.Y, '\U00000298', ConsoleColor.Magenta);
+                }
+                else
+                {
+                    food = new Position(randomGenerator.Next(0, Console.WindowWidth),
+                        randomGenerator.Next(6, Console.WindowHeight - 1));
+                }
                 if (snakeNewHead.X == food.X && snakeNewHead.Y == food.Y)
-                {                 
+                {
+                    playerPoints++; // for every food eaten score increases by 1
+                    sleep -= 2; // for every food eaten speed increases by ~2%
                     food = new Position(randomGenerator.Next(0, Console.WindowWidth), randomGenerator.Next(6, Console.WindowHeight - 1));
-                    PrintFood(food.X, food.Y, '@', ConsoleColor.Magenta);
+                    if (!snakeElements.Contains(food) && !obstacle.Contains(food))
+                    {
+                        PrintFood(food.X, food.Y, '\U00000298', ConsoleColor.Magenta);
+                    }
                     snakeElements.Enqueue(snakeNewHead);
                     foreach (Position position in snakeElements)
                     {
-                        PrintSnake(position.X, position.Y, 'o');
+                        PrintSnake(position.X, position.Y, '\U000025A1');
                     }
                 }
 
-                if (level == 1)
-                {
-                    Thread.Sleep(sleep);
-                }
-                else if (level == 2)
-                {
-                    Thread.Sleep(sleep - 20);
-                }
-                else if (level == 3)
-                {
-                    Thread.Sleep(sleep - 35);
-                }
-                else if (level == 4)
-                {
-                    Thread.Sleep(sleep - 50);
-                }
+                ChangeLevels();
                 GetSpeedOfSnake();
+            }
+        }
+
+        private static void ChangeLevels()
+        {
+            if (playerPoints == oldPlayerPoints + 6 && level < 4)
+            {
+                oldPlayerPoints = playerPoints;
+                level++;
             }
         }
 
@@ -356,11 +367,12 @@
                 Thread.Sleep(sleep - 50);
             }
         }
+
         static void PrintFood(int x, int y, char symbol, ConsoleColor foodColor = ConsoleColor.Yellow)
         {
-            Console.SetCursorPosition(x, y);
-            Console.ForegroundColor = foodColor;
-            Console.Write(symbol);
+                Console.SetCursorPosition(x, y);
+                Console.ForegroundColor = foodColor;
+                Console.Write(symbol);
         }
 
         private static void PrintObstacles(int level, List<Position> obstacle, ConsoleColor color = ConsoleColor.Green)
@@ -412,8 +424,8 @@
                     obstacle.Add(new Position(i, 15));
                 }
 
-                Console.SetCursorPosition(21, 15);
-                Console.Write("xxxxxxxxxxxxxxxxxx");
+                Console.SetCursorPosition(22, 15);
+                Console.Write("xxxxxxxxxxxxxxxxx");
 
                 for (int i = 12; i < 19; i++)
                 {
@@ -495,7 +507,7 @@
 
             foreach (Position position in snakeElements)
             {
-                PrintSnake(position.X, position.Y, 'o');
+                PrintSnake(position.X, position.Y, '\U000025A1');
             }
         }
 
@@ -507,6 +519,7 @@
             PrintData(0, 2, string.Format("{0}{1}", new string(' ', windowWidth / 2 - 5),
                 string.Format("{0}", "JUST SNAKE")), ConsoleColor.Red);
             PrintData(4, 2, string.Format("{0}", level.ToString()), ConsoleColor.Yellow);
+            PrintData(45, 2, $"Score: {playerPoints}", ConsoleColor.Green);
             PrintData(0, 4, new string('-', windowWidth));
         }
 
@@ -540,7 +553,7 @@
                     direction = 3;
                 }
             }
-            if (command.Key == ConsoleKey.P)
+            if (command.Key == ConsoleKey.Spacebar)
             {
                 PauseGame();
             }
@@ -551,13 +564,19 @@
         private static void PauseGame()
         {
             while (true)
-            {
+            {               
+                PrintData(2, 25, "Menu key - M", ConsoleColor.Blue);
+                PrintData(2, 26, "Unpause key - Spacebar", ConsoleColor.Blue);
                 ConsoleKeyInfo unpause = Console.ReadKey();
-                if (unpause.Key == ConsoleKey.P)
+                if (unpause.Key == ConsoleKey.Spacebar)
                 {
                     return;
                 }
-            }          
+                else if (unpause.Key == ConsoleKey.M)
+                {
+                    Menu();
+                }
+            }
         }
 
         private static void StartSnakeElements()
