@@ -1,6 +1,4 @@
-﻿using System.CodeDom;
-using System.Security.Cryptography.X509Certificates;
-
+﻿
 namespace JustSnake
 {
     using System;
