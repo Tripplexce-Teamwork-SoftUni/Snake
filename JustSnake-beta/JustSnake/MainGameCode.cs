@@ -307,10 +307,14 @@
 
                 PrintFood(food.X, food.Y, '@', ConsoleColor.Magenta);
                 if (snakeNewHead.X == food.X && snakeNewHead.Y == food.Y)
-                {
+                {                 
                     food = new Position(randomGenerator.Next(0, Console.WindowWidth), randomGenerator.Next(6, Console.WindowHeight - 1));
                     PrintFood(food.X, food.Y, '@', ConsoleColor.Magenta);
                     snakeElements.Enqueue(snakeNewHead);
+                    foreach (Position position in snakeElements)
+                    {
+                        PrintSnake(position.X, position.Y, 'o');
+                    }
                 }
 
                 if (level == 1)
