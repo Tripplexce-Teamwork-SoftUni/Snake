@@ -343,7 +343,7 @@
             {
                 for (int j = i + 1; j < length; j++)
                 {
-                    if (leaderboardPoints[i] > leaderboardPoints[j])
+                    if (leaderboardPoints[i] < leaderboardPoints[j])
                     {
                         temp = leaderboardPoints[i];
                         leaderboardPoints[i] = leaderboardPoints[j];
