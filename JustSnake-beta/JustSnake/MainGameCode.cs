@@ -268,7 +268,6 @@
             direction = 0; // 0 right 1 left 2 down 3 up
             StartSnakeElements();
            
-            printOobstacles(level, obstacle);
             while (true)
             {                
                 if (Console.KeyAvailable)
@@ -299,12 +298,12 @@
                 snakeElements.Dequeue();
 
                 MoveSnake();
-                printOobstacles(level, obstacle);
+                PrintObstacles(level, obstacle);
 
                 Thread.Sleep(150);
             }
         }
-        private static void printOobstacles(int level, List<Position> obstacle, ConsoleColor color = ConsoleColor.Green)
+        private static void PrintObstacles(int level, List<Position> obstacle, ConsoleColor color = ConsoleColor.Green)
         {
 
             if (level >=2 )
@@ -345,8 +344,30 @@
 
                 Console.SetCursorPosition(21, 22);
                 Console.Write("xxxxxxxxxxxxxxxxxx");
+            }
+            if (level == 4)
+            {
+                for (int i = 21; i < 39; i++)
+                {
+                    obstacle.Add(new Position(i, 15));
+                }
+
+                Console.SetCursorPosition(21, 15);
+                Console.Write("xxxxxxxxxxxxxxxxxx");
+
+                for (int i = 12; i < 19; i++)
+                {
+                    obstacle.Add(new Position(30, i));
+                }
+
+                for (int i = 12; i < 19; i++)
+                {
+                    Console.SetCursorPosition(30, i);
+                    Console.Write("x");
+                }
 
             }
+
         }
         private static void WriteName()
         {
