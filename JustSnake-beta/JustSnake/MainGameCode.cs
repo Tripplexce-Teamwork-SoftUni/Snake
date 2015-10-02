@@ -40,7 +40,9 @@
         private static List<int> leaderboardPoints = new List<int>();   // Leaderboard Points List
 
         private static int playerPoints;    // Player points 
-        
+
+        private static int sleep = 150;
+
         private static string filePath = "../../file.md";
 
         private static string[] options = { "New Game", "HighScores", "Choose Difficulty", "Quit" };
@@ -300,7 +302,23 @@
                 MoveSnake();
                 PrintObstacles(level, obstacle);
 
-                Thread.Sleep(150);
+                if (level == 1)
+                {
+                    Thread.Sleep(sleep);
+                }
+                else if (level == 2)
+                {
+                    Thread.Sleep(sleep - 20);
+                }
+                else if (level == 3)
+                {
+                    Thread.Sleep(sleep - 35);
+                }
+                else if (level == 4)
+                {
+                    Thread.Sleep(sleep - 50);
+                }
+
             }
         }
         private static void PrintObstacles(int level, List<Position> obstacle, ConsoleColor color = ConsoleColor.Green)
