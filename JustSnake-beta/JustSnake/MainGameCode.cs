@@ -276,7 +276,7 @@ namespace JustSnake
             Position food = new Position(randomGenerator.Next(0, Console.WindowWidth), randomGenerator.Next(6, Console.WindowHeight - 1));
             
             while (true)
-            {                
+            {
                 if (Console.KeyAvailable)
                 {
                     ConsoleKeyInfo command = Console.ReadKey();
@@ -288,7 +288,7 @@ namespace JustSnake
                 Position snakeNewHead = new Position(snakeHead.X + directions[direction].X, snakeHead.Y + directions[direction].Y);
 
                 if (snakeNewHead.X > Console.WindowWidth - 1 || snakeNewHead.X < 0 ||
-                    snakeNewHead.Y < 5 || snakeNewHead.Y > Console.WindowHeight - 1 || snakeElements.Contains(snakeNewHead)|| obstacle.Contains(snakeNewHead))
+                    snakeNewHead.Y < 5 || snakeNewHead.Y > Console.WindowHeight - 1 || snakeElements.Contains(snakeNewHead) || obstacle.Contains(snakeNewHead))
                 {
                     Console.Clear();
                     DeathSound.PlayDeathSound();
@@ -297,7 +297,7 @@ namespace JustSnake
                     Console.WriteLine();
                     WriteName();
 
-                    while (DeathSound.IsPlaying());
+                    while (DeathSound.IsPlaying()) ;
                     Menu();
                 }
 
@@ -307,24 +307,12 @@ namespace JustSnake
                 MoveSnake();
                 PrintObstacles(level, obstacle);
 
-                if (!snakeElements.Contains(food) && !obstacle.Contains(food))
-                {
-                    PrintFood(food.X, food.Y, '\U00000298', ConsoleColor.Magenta);
-                }
-                else
-                {
-                    food = new Position(randomGenerator.Next(0, Console.WindowWidth),
-                        randomGenerator.Next(6, Console.WindowHeight - 1));
-                }
                 if (snakeNewHead.X == food.X && snakeNewHead.Y == food.Y)
                 {
                     playerPoints++; // for every food eaten score increases by 1
                     sleep -= 2; // for every food eaten speed increases by ~2%
-                    food = new Position(randomGenerator.Next(0, Console.WindowWidth), randomGenerator.Next(6, Console.WindowHeight - 1));
-                    if (!snakeElements.Contains(food) && !obstacle.Contains(food))
-                    {
-                        PrintFood(food.X, food.Y, '\U00000298', ConsoleColor.Magenta);
-                    }
+                    food = FoodCanBePrinted(food);
+                    PrintFood(food.X, food.Y, '\U00000298', ConsoleColor.Magenta);
                     snakeElements.Enqueue(snakeNewHead);
                     foreach (Position position in snakeElements)
                     {
@@ -332,9 +320,26 @@ namespace JustSnake
                     }
                 }
 
+                food = FoodCanBePrinted(food);
+
                 ChangeLevels();
                 GetSpeedOfSnake();
             }
+        }
+
+        private static Position FoodCanBePrinted(Position food)
+        {
+            if (!snakeElements.Contains(food) && !obstacle.Contains(food))
+            {
+                PrintFood(food.X, food.Y, '\U00000298', ConsoleColor.Magenta);
+            }
+            else
+            {
+                food = new Position(randomGenerator.Next(0, Console.WindowWidth),
+                    randomGenerator.Next(6, Console.WindowHeight - 1));
+            }
+
+            return food;
         }
 
         private static void ChangeLevels()
