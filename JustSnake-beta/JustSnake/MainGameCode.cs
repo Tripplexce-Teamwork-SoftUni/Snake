@@ -23,7 +23,7 @@
     {
         private static int windowHeight = 30;
 
-        private static int windowWidth = 70;
+        private static int windowWidth = 60;
 
         private static int level = 1;
 
