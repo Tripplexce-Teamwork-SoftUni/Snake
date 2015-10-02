@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using System.Threading;
 
     internal struct Position
@@ -33,7 +34,11 @@
 
         private static Queue<Position> snakeElements = new Queue<Position>();
 
-        private static List<string> leaderboard = new List<string>();   // Leaderboard List
+        private static List<string> leaderboardNames = new List<string>();   // Leaderboard Name List
+
+        private static List<int> leaderboardPoints = new List<int>();   // Leaderboard Points List
+
+        private static int playerPoints;    // Player points 
         
         private static string filePath = "../../file.md";
 
@@ -243,10 +248,11 @@
             PrintData(0, upperMenuBorder, new string('-', windowWidth), ConsoleColor.DarkMagenta);
 
             int i = 0;
-
-            for (; i < leaderboard.Count; i++)
+            
+            for (; i < leaderboardNames.Count; i++)
             {
-                PrintData(0, i + 6, string.Format("[{0}] {1}", i + 1, leaderboard[i]), ConsoleColor.Yellow);
+                PrintData(0, i + 6, string.Format("[{0}] {1} {2}", i + 1, leaderboardNames[i], 
+                    leaderboardPoints[i]), ConsoleColor.Yellow);                
             }
 
             PrintData(0, i + 8, "Press any key to continue", ConsoleColor.White);
@@ -257,12 +263,12 @@
 
         private static void StartGame()
         {
+            playerPoints = 0;   // Starting player points
             direction = 0; // 0 right 1 left 2 down 3 up
             StartSnakeElements();
 
             while (true)
-            {
-                
+            {                
                 if (Console.KeyAvailable)
                 {
                     ConsoleKeyInfo command = Console.ReadKey();
@@ -301,8 +307,55 @@
 
             PrintData(0, 6, "Write your name: ");
             string name = Console.ReadLine();
+            name = name.Trim();
 
-            leaderboard.Add(name);
+            if (name.Length < 1)
+            {
+                PrintError();
+                WriteName();
+            }
+            else
+            {
+                leaderboardNames.Add(name);
+                leaderboardPoints.Add(playerPoints);
+
+                LeaderboardSort();
+
+                if (leaderboardNames.Count > 10)
+                {
+                    leaderboardNames.RemoveAt(10);
+                    leaderboardPoints.RemoveAt(10);
+                }
+            }            
+        }
+
+        private static void PrintError()
+        {
+            PrintData(0, 0, "Write a name without empty space!");
+        }
+
+        private static void LeaderboardSort()
+        {
+            int length = leaderboardPoints.Count;
+            int temp = leaderboardPoints[0];
+            string tempString = string.Empty;
+
+            for (int i = 0; i < length; i++)
+            {
+                for (int j = i + 1; j < length; j++)
+                {
+                    if (leaderboardPoints[i] > leaderboardPoints[j])
+                    {
+                        temp = leaderboardPoints[i];
+                        leaderboardPoints[i] = leaderboardPoints[j];
+                        leaderboardPoints[j] = temp;
+
+                        tempString = leaderboardNames[i];
+                        leaderboardNames[i] = leaderboardNames[j];
+                        leaderboardNames[j] = tempString;
+                    }
+                }
+            }
         }
 
         private static void MoveSnake()
@@ -420,12 +473,26 @@
             {
                 string line = reader.ReadLine();
 
-                while (line != null)
+                if (line != null)
                 {
-                    leaderboard.Add(line);
+                    string[] divider = line.Split(' ');
+                    int index = 0;
 
-                    line = reader.ReadLine();
-                }
+                    while (line != null)
+                    {
+                        index++;
+
+                        if (index > 10)
+                        {
+                            break;
+                        }
+
+                        leaderboardNames.Add(divider[0]);
+                        leaderboardPoints.Add(int.Parse(divider[1]));
+
+                        line = reader.ReadLine();
+                    }
+                }                
             }
         }
 
@@ -436,18 +503,16 @@
         {
             using (StreamWriter writer = new StreamWriter(filePath))
             {
-                for (int i = 0; i < leaderboard.Count; i++)
+                for (int i = 0; i < leaderboardNames.Count; i++)
                 {
-                    writer.Write(leaderboard[i]);
+                    writer.Write(string.Format("{0} {1}", leaderboardNames[i], leaderboardPoints[i]));
                     writer.WriteLine();
                 }
             }
-        }
-
-        
+        }        
     }
 
-    class DeathSound
+    internal class DeathSound
     {
         private static Thread playDeathSound;
 
@@ -462,7 +527,6 @@
 
             playDeathSound = new Thread(() =>
             {
-
                 Console.Beep(440, 500);
                 Console.Beep(440, 500);
                 Console.Beep(440, 500);
@@ -484,7 +548,6 @@
             }, 1);
 
             playDeathSound.Start();
-
         }
     }
 }
