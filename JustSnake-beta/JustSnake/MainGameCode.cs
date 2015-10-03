@@ -6,6 +6,7 @@ namespace JustSnake
     using System.IO;
     using System.Linq;
     using System.Threading;
+    using System.Media;
 
     internal struct Position
     {
@@ -55,7 +56,7 @@ namespace JustSnake
         private static int upperMenuBorder = 1;
 
         private static int lowerMenuBorder = 28;
-        
+
 
         private static Position[] directions = new Position[]
         {
@@ -255,11 +256,11 @@ namespace JustSnake
             PrintData(0, upperMenuBorder, new string('-', windowWidth), ConsoleColor.DarkMagenta);
 
             int i = 0;
-            
+
             for (; i < leaderboardNames.Count; i++)
             {
-                PrintData(0, i + 6, string.Format("[{0}] {1} {2}", i + 1, leaderboardNames[i], 
-                    leaderboardPoints[i]), ConsoleColor.Yellow);                
+                PrintData(0, i + 6, string.Format("[{0}] {1} {2}", i + 1, leaderboardNames[i],
+                    leaderboardPoints[i]), ConsoleColor.Yellow);
             }
 
             PrintData(0, i + 8, "Press any key to continue", ConsoleColor.White);
@@ -270,11 +271,13 @@ namespace JustSnake
 
         private static void StartGame()
         {
+            GameSounds.PlayMovingSound();
             playerPoints = 0;   // Starting player points
             direction = 0; // 0 right 1 left 2 down 3 up
             StartSnakeElements();
-            Position food = new Position(randomGenerator.Next(0, Console.WindowWidth), randomGenerator.Next(6, Console.WindowHeight - 1));
             
+            Position food = new Position(randomGenerator.Next(0, Console.WindowWidth), randomGenerator.Next(6, Console.WindowHeight - 1));
+
             while (true)
             {
                 if (Console.KeyAvailable)
@@ -282,6 +285,7 @@ namespace JustSnake
                     ConsoleKeyInfo command = Console.ReadKey();
 
                     direction = ChangeDirection(command, direction);
+                    
                 }
 
                 Position snakeHead = snakeElements.Last();
@@ -291,24 +295,24 @@ namespace JustSnake
                     snakeNewHead.Y < 5 || snakeNewHead.Y > Console.WindowHeight - 1 || snakeElements.Contains(snakeNewHead) || obstacle.Contains(snakeNewHead))
                 {
                     Console.Clear();
-                    DeathSound.PlayDeathSound();
+                    GameSounds.PlayDeathSound();
                     PrintData(22, 15, "Game Over!", ConsoleColor.Yellow);
 
                     Console.WriteLine();
                     WriteName();
-
-                    while (DeathSound.IsPlaying()) ;
                     Menu();
                 }
 
                 snakeElements.Enqueue(snakeNewHead);
                 snakeElements.Dequeue();
-
+                
                 MoveSnake();
                 PrintObstacles(level, obstacle);
 
                 if (snakeNewHead.X == food.X && snakeNewHead.Y == food.Y)
                 {
+                    GameSounds.PlayEathingSound();
+                    GameSounds.PlayMovingSound();
                     playerPoints++; // for every food eaten score increases by 1
                     sleep -= 2; // for every food eaten speed increases by ~2%
                     food = FoodCanBePrinted(food);
@@ -373,15 +377,15 @@ namespace JustSnake
 
         static void PrintFood(int x, int y, char symbol, ConsoleColor foodColor = ConsoleColor.Yellow)
         {
-                Console.SetCursorPosition(x, y);
-                Console.ForegroundColor = foodColor;
-                Console.Write(symbol);
+            Console.SetCursorPosition(x, y);
+            Console.ForegroundColor = foodColor;
+            Console.Write(symbol);
         }
 
         private static void PrintObstacles(int level, List<Position> obstacle, ConsoleColor color = ConsoleColor.Green)
         {
 
-            if (level >=2 )
+            if (level >= 2)
             {
                 for (int i = 12; i < 19; i++)
                 {
@@ -469,7 +473,7 @@ namespace JustSnake
                     leaderboardNames.RemoveAt(10);
                     leaderboardPoints.RemoveAt(10);
                 }
-            }            
+            }
         }
 
         private static void PrintError()
@@ -507,7 +511,6 @@ namespace JustSnake
         private static void MoveSnake()
         {
             SnakePlayingMenu();
-
             foreach (Position position in snakeElements)
             {
                 PrintSnake(position.X, position.Y, '\U000025A1');
@@ -517,7 +520,6 @@ namespace JustSnake
         private static void SnakePlayingMenu()
         {
             Console.Clear();
-
             PrintData(0, 0, new string('-', windowWidth));
             PrintData(0, 2, string.Format("{0}{1}", new string(' ', windowWidth / 2 - 5),
                 string.Format("{0}", "JUST SNAKE")), ConsoleColor.Red);
@@ -567,7 +569,7 @@ namespace JustSnake
         private static void PauseGame()
         {
             while (true)
-            {               
+            {
                 PrintData(2, 25, "Menu key - M", ConsoleColor.Blue);
                 PrintData(2, 26, "Unpause key - Spacebar", ConsoleColor.Blue);
                 ConsoleKeyInfo unpause = Console.ReadKey();
@@ -645,7 +647,7 @@ namespace JustSnake
 
                         line = reader.ReadLine();
                     }
-                }                
+                }
             }
         }
 
@@ -662,45 +664,42 @@ namespace JustSnake
                     writer.WriteLine();
                 }
             }
-        }        
+        }
     }
 
-    internal class DeathSound
+    internal class GameSounds
     {
-        private static Thread playDeathSound;
+        private static Thread playEathingSound;
 
-        public static bool IsPlaying()
+        private static System.Media.SoundPlayer player;
+
+        public static void PlayMovingSound()
         {
-            return playDeathSound.IsAlive;
+            player = new SoundPlayer(@"..\..\sounds\snake_move.wav");
+            player.PlayLooping();
         }
 
         public static void PlayDeathSound()
         {
-            //Thread playDeathSound;
+            player = new SoundPlayer(@"..\..\sounds\snake_die.wav");
+            player.Play();
+        }
 
-            playDeathSound = new Thread(() =>
+        public static void PlayEathingSound()
+        {
+            player = new SoundPlayer(@"..\..\sounds\snake_eat.wav");
+            player.PlaySync();
+        }
+
+
+        internal class GameMusic
+        {
+            private static System.Media.SoundPlayer player = new SoundPlayer(@"D:\mb_die.wav");
+
+            public static void PlayMusic()
             {
-                Console.Beep(440, 500);
-                Console.Beep(440, 500);
-                Console.Beep(440, 500);
-                Console.Beep(349, 350);
-                Console.Beep(523, 150);
-                Console.Beep(440, 500);
-                Console.Beep(349, 350);
-                Console.Beep(523, 150);
-                Console.Beep(440, 1000);
-                Console.Beep(659, 500);
-                Console.Beep(659, 500);
-                Console.Beep(659, 500);
-                Console.Beep(698, 350);
-                Console.Beep(523, 150);
-                Console.Beep(415, 500);
-                Console.Beep(349, 350);
-                Console.Beep(523, 150);
-                Console.Beep(440, 1000);
-            }, 1);
-
-            playDeathSound.Start();
+                player.PlayLooping();
+            }
         }
     }
 }
