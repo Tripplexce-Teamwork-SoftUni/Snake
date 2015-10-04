@@ -78,10 +78,9 @@ namespace JustSnake
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             Console.BufferHeight = Console.WindowHeight = windowHeight;
             Console.BufferWidth = Console.WindowWidth = windowWidth;
-            PrintLives(2, 2, "Lives: ", liveNumber);
+            
             LoadFile();
-            Menu();
-            PrintLives(1, 1, "Lives: ", liveNumber);
+            Menu();          
         }
 
         private static void Menu()
@@ -424,7 +423,7 @@ namespace JustSnake
 
         private static void PrintObstacles(int level, List<Position> obstacle, ConsoleColor color = ConsoleColor.Green)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = color;
             if (level >= 2)
             {
                 for (int i = 12; i < 19; i++)
