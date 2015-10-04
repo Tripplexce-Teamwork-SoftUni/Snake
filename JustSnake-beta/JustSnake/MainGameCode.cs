@@ -279,6 +279,7 @@ namespace JustSnake
 
         private static void StartGame()
         {
+            GameSounds.PlayNewGameSound();
             GameSounds.PlayMovingSound();
             playerPoints = 0;   // Starting player points
             direction = 0; // 0 right 1 left 2 down 3 up
@@ -727,6 +728,12 @@ namespace JustSnake
         public static void PlayEathingSound()
         {
             player = new SoundPlayer(@"..\..\sounds\snake_eat.wav");
+            player.PlaySync();
+        }
+
+        public static void PlayNewGameSound()
+        {
+            player = new SoundPlayer(@"..\..\sounds\snake_new.wav");
             player.PlaySync();
         }
 
