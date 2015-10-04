@@ -57,6 +57,13 @@ namespace JustSnake
 
         private static int lowerMenuBorder = 28;
 
+        private static List<string> liveNumber = new List<string>()
+        {
+            "&",
+            "&",
+            "&"
+        };
+
 
         private static Position[] directions = new Position[]
         {
@@ -71,9 +78,10 @@ namespace JustSnake
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             Console.BufferHeight = Console.WindowHeight = windowHeight;
             Console.BufferWidth = Console.WindowWidth = windowWidth;
-
+            PrintLives(2, 2, "Lives: ", liveNumber);
             LoadFile();
             Menu();
+            PrintLives(1, 1, "Lives: ", liveNumber);
         }
 
         private static void Menu()
@@ -277,9 +285,10 @@ namespace JustSnake
             StartSnakeElements();
             
             Position food = new Position(randomGenerator.Next(0, Console.WindowWidth), randomGenerator.Next(6, Console.WindowHeight - 1));
-
+            
             while (true)
             {
+                
                 if (Console.KeyAvailable)
                 {
                     ConsoleKeyInfo command = Console.ReadKey();
@@ -294,6 +303,27 @@ namespace JustSnake
                 if (snakeNewHead.X > Console.WindowWidth - 1 || snakeNewHead.X < 0 ||
                     snakeNewHead.Y < 5 || snakeNewHead.Y > Console.WindowHeight - 1 || snakeElements.Contains(snakeNewHead) || obstacle.Contains(snakeNewHead))
                 {
+                    if (liveNumber.Count >= 1)
+                    {
+                        GameSounds.PlayDeathSound();
+                        liveNumber.Remove(liveNumber[0]);
+                        Thread.Sleep(2000);
+                        GameSounds.PlayMovingSound();
+
+                        direction = 0;
+                        snakeElements.Clear();
+                        for (int i = 0; i <= 5; i++)
+                        {
+                            snakeElements.Enqueue(new Position(i, 5));
+                        }
+                        foreach (Position position in snakeElements)
+                        {
+                            PrintSnake(position.X, position.Y, '\U000025A1');
+                        }
+                        snakeNewHead = new Position(6, 5);
+                    }
+                    else
+                    {
                     Console.Clear();
                     GameSounds.PlayDeathSound();
                     PrintData(22, 15, "Game Over!", ConsoleColor.Yellow);
@@ -301,6 +331,7 @@ namespace JustSnake
                     Console.WriteLine();
                     WriteName();
                     Menu();
+                    }
                 }
 
                 snakeElements.Enqueue(snakeNewHead);
@@ -308,6 +339,7 @@ namespace JustSnake
                 
                 MoveSnake();
                 PrintObstacles(level, obstacle);
+                PrintLives(25, 3, "Lives: ", liveNumber);
 
                 if (snakeNewHead.X == food.X && snakeNewHead.Y == food.Y)
                 {
@@ -328,9 +360,16 @@ namespace JustSnake
 
                 ChangeLevels();
                 GetSpeedOfSnake();
+                
             }
         }
-
+        private static void PrintLives(int x, int y, string lives, List<string> liveNumber, ConsoleColor color = ConsoleColor.Yellow)
+        {
+            Console.SetCursorPosition(x, y);
+            Console.ForegroundColor = color;
+            Console.Write(lives);
+            Console.WriteLine(string.Join(" ", liveNumber));
+        }
         private static Position FoodCanBePrinted(Position food)
         {
             if (!snakeElements.Contains(food) && !obstacle.Contains(food))
@@ -384,7 +423,7 @@ namespace JustSnake
 
         private static void PrintObstacles(int level, List<Position> obstacle, ConsoleColor color = ConsoleColor.Green)
         {
-
+            Console.ForegroundColor = ConsoleColor.Green;
             if (level >= 2)
             {
                 for (int i = 12; i < 19; i++)
