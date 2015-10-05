@@ -687,14 +687,25 @@
                 {
                     string[] divider = line.Split(' ');
                     int index = 0;
+                    int minusIndex = 2;
 
                     while (line != null)
                     {
                         index++;
+                        divider = line.Split(' ');
 
                         if (index > 10)
                         {
                             break;
+                        }
+                        if (index > 1)
+                        {
+                            if (divider[0] == leaderboardNames[index - minusIndex] && int.Parse(divider[1]) == leaderboardPoints[index - minusIndex])
+                            {
+                                minusIndex++;
+
+                                continue;
+                            }
                         }
 
                         leaderboardNames.Add(divider[0]);
