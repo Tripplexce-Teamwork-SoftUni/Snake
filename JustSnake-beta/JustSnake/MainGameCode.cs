@@ -31,6 +31,15 @@ namespace JustSnake
 
         private static int direction;   // 0 right 1 left 2 down 3 up
 
+        private static string menuIcon = @"    ___         ___     ______           ___        
+      | |         | |    / ____|           | |       
+      | |_   _ ___| |_  | (___  _ __   __ _| | _____ 
+  _   | | | | / __| __|  \___ \| '_ \ / _` | |/ / _ \
+ | |__| | |_| \__ \ |_   ____) | | | | (_| |   <  __/
+  \____/ \__,_|___/\__| |_____/|_| |_|\__,_|_|\_\___|
+                                                     
+                                                     ";
+
         private static Random randomGenerator = new Random();
 
         private static Queue<Position> snakeElements = new Queue<Position>();
@@ -92,6 +101,7 @@ namespace JustSnake
             while (true)
             {
                 PrintData(0, lowerMenuBorder, new string('-', windowWidth), ConsoleColor.Magenta);
+                PrintData(2, 3, menuIcon, ConsoleColor.Magenta);
                 PrintData(0, upperMenuBorder, new string('-', windowWidth), ConsoleColor.DarkMagenta);
 
                 PrintOptionsMenu(currentSelection);

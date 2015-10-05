@@ -1,1 +1,7 @@
 C:\Users\Innovia\Desktop\C# Teamwork\Snake\JustSnake-beta\JustSnake\bin\Debug\JustSnake.exe.config
+C:\Users\krasimir\Desktop\Snake\JustSnake-beta\JustSnake\bin\Debug\JustSnake.exe.config
+C:\Users\krasimir\Desktop\Snake\JustSnake-beta\JustSnake\bin\Debug\JustSnake.exe
+C:\Users\krasimir\Desktop\Snake\JustSnake-beta\JustSnake\bin\Debug\JustSnake.pdb
+C:\Users\krasimir\Desktop\Snake\JustSnake-beta\JustSnake\obj\Debug\JustSnake.csprojResolveAssemblyReference.cache
+C:\Users\krasimir\Desktop\Snake\JustSnake-beta\JustSnake\obj\Debug\JustSnake.exe
+C:\Users\krasimir\Desktop\Snake\JustSnake-beta\JustSnake\obj\Debug\JustSnake.pdb
