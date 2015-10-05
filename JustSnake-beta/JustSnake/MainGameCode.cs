@@ -318,6 +318,7 @@ namespace JustSnake
                         GameSounds.PlayDeathSound();
                         liveNumber.Remove(liveNumber[0]);
                         Thread.Sleep(2000);
+                        
                         GameSounds.PlayMovingSound();
 
                         direction = 0;
@@ -384,7 +385,7 @@ namespace JustSnake
         {
             if (!snakeElements.Contains(food) && !obstacle.Contains(food))
             {
-                PrintFood(food.X, food.Y, '\U00000298', ConsoleColor.Magenta);
+                PrintFood(food.X, food.Y, '\U000000AE', ConsoleColor.Magenta);
             }
             else
             {
@@ -718,14 +719,14 @@ namespace JustSnake
 
     internal class GameSounds
     {
-        private static Thread playEathingSound;
-
         private static System.Media.SoundPlayer player;
+        private static System.Media.SoundPlayer movingplayer;
 
         public static void PlayMovingSound()
         {
-            player = new SoundPlayer(@"..\..\sounds\snake_move.wav");
-            player.PlayLooping();
+            movingplayer = new SoundPlayer(@"..\..\sounds\snake_move.wav");
+            while (!player.IsLoadCompleted) ;
+            movingplayer.PlayLooping();
         }
 
         public static void PlayDeathSound()
@@ -736,8 +737,9 @@ namespace JustSnake
 
         public static void PlayEathingSound()
         {
+            movingplayer.Stop();
             player = new SoundPlayer(@"..\..\sounds\snake_eat.wav");
-            player.PlaySync();
+            player.Play();
         }
 
         public static void PlayNewGameSound()
