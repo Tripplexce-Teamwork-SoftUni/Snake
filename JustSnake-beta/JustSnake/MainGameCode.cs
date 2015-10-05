@@ -1,5 +1,4 @@
-﻿
-namespace JustSnake
+﻿namespace JustSnake
 {
     using System;
     using System.Collections.Generic;
@@ -97,6 +96,12 @@ namespace JustSnake
             Console.CursorVisible = false;
             Console.Clear();
             int currentSelection = 0;
+            liveNumber = new List<string>()
+            {
+                "&",
+                "&",
+                "&"
+            };
 
             while (true)
             {
