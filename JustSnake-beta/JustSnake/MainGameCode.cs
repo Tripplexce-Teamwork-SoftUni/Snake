@@ -359,8 +359,7 @@
 
                 if (snakeNewHead.X == food.X && snakeNewHead.Y == food.Y)
                 {
-                    GameSounds.PlayEathingSound();
-                    GameSounds.PlayMovingSound();
+                    //GameSounds.PlayMovingSound();
                     playerPoints++; // for every food eaten score increases by 1
                     sleep -= 2; // for every food eaten speed increases by ~2%
                     food = FoodCanBePrinted(food);
@@ -751,28 +750,17 @@
             player.Play();
         }
 
-        public static void PlayEathingSound()
-        {
-            movingplayer.Stop();
-            player = new SoundPlayer(@"..\..\sounds\snake_eat.wav");
-            player.Play();
-        }
+        //public static void PlayEathingSound()
+        //{
+        //    movingplayer.Stop();
+        //    player = new SoundPlayer(@"..\..\sounds\snake_eat.wav");
+        //    player.Play();
+        //}
 
         public static void PlayNewGameSound()
         {
             player = new SoundPlayer(@"..\..\sounds\snake_new.wav");
             player.PlaySync();
-        }
-
-
-        internal class GameMusic
-        {
-            private static System.Media.SoundPlayer player = new SoundPlayer(@"D:\mb_die.wav");
-
-            public static void PlayMusic()
-            {
-                player.PlayLooping();
-            }
         }
     }
 }
