@@ -1,4 +1,6 @@
-﻿namespace JustSnake
+﻿using System.Runtime.CompilerServices;
+
+namespace JustSnake
 {
     using System;
     using System.Collections.Generic;
@@ -96,6 +98,11 @@
             Console.CursorVisible = false;
             Console.Clear();
             int currentSelection = 0;
+            level = 1;
+            sleep = 150;
+            playerPoints = 0;
+            oldPlayerPoints = 0;
+
             liveNumber = new List<string>()
             {
                 "&",
@@ -323,7 +330,6 @@
                         GameSounds.PlayDeathSound();
                         liveNumber.Remove(liveNumber[0]);
                         Thread.Sleep(2000);
-                        
                         GameSounds.PlayMovingSound();
 
                         direction = 0;
@@ -438,6 +444,7 @@
 
         private static void PrintObstacles(int level, List<Position> obstacle, ConsoleColor color = ConsoleColor.Green)
         {
+            obstacle.Clear();
             Console.ForegroundColor = color;
             if (level >= 2)
             {
