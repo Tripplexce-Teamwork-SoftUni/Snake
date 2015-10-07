@@ -1,0 +1,6 @@
+C:\Users\krasimir\Desktop\Snake\JustSnake-beta-v2\JustSnake\bin\Debug\JustSnake.exe.config
+C:\Users\krasimir\Desktop\Snake\JustSnake-beta-v2\JustSnake\bin\Debug\JustSnake.exe
+C:\Users\krasimir\Desktop\Snake\JustSnake-beta-v2\JustSnake\bin\Debug\JustSnake.pdb
+C:\Users\krasimir\Desktop\Snake\JustSnake-beta-v2\JustSnake\obj\Debug\JustSnake.csprojResolveAssemblyReference.cache
+C:\Users\krasimir\Desktop\Snake\JustSnake-beta-v2\JustSnake\obj\Debug\JustSnake.exe
+C:\Users\krasimir\Desktop\Snake\JustSnake-beta-v2\JustSnake\obj\Debug\JustSnake.pdb

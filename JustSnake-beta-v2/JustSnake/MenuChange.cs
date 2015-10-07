@@ -6,7 +6,7 @@
 
     internal class MenuChange
     {
-        internal static void RunMenuOption(int currentSelection, int level)
+        internal static int RunMenuOption(int currentSelection, int level)
         {
             if (currentSelection == 0)
             {
@@ -29,6 +29,7 @@
                 Console.Clear();
                 MainGameCode.Menu();
             }
+            return level;
         }
 
         internal static void WriteName(List<string> leaderboardNames, List<int> leaderboardPoints, int playerPoints)

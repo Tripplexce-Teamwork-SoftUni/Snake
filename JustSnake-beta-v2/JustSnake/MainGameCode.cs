@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Threading;
 
-    internal struct Position
+    public struct Position
     {
         public int X;
 
@@ -20,15 +20,15 @@
 
     public class MainGameCode
     {
-        private static int windowHeight = 30;
+        public static int windowHeight = 30;
 
-        private static int windowWidth = 60;
+        public static int windowWidth = 60;
 
-        private static int level = 1;
+        public static int level = 1;
 
-        private static int direction;   // 0 right 1 left 2 down 3 up
+        public static int direction;   // 0 right 1 left 2 down 3 up
 
-        private static string menuIcon = @"    ___         ___     ______           ___        
+        public static string menuIcon = @"    ___         ___     ______           ___        
       | |         | |    / ____|           | |       
       | |_   _ ___| |_  | (___  _ __   __ _| | _____ 
   _   | | | | / __| __|  \___ \| '_ \ / _` | |/ / _ \
@@ -37,33 +37,33 @@
                                                      
                                                      ";
 
-        private static Random randomGenerator = new Random();
+        public static Random randomGenerator = new Random();
 
-        private static Queue<Position> snakeElements = new Queue<Position>();
+        public static Queue<Position> snakeElements = new Queue<Position>();
 
-        private static List<Position> obstacle = new List<Position>();
+        public static List<Position> obstacle = new List<Position>();
 
-        private static List<string> leaderboardNames = new List<string>();   // Leaderboard Name List
+        public static List<string> leaderboardNames = new List<string>();   // Leaderboard Name List
 
-        private static List<int> leaderboardPoints = new List<int>();   // Leaderboard Points List
+        public static List<int> leaderboardPoints = new List<int>();   // Leaderboard Points List
 
-        private static int playerPoints = 0;    // Player points 
+        public static int playerPoints = 0;    // Player points 
 
-        private static int oldPlayerPoints = 0;
+        public static int oldPlayerPoints = 0;
 
-        private static int sleep = 150;
+        public static int sleep = 150;
 
-        private static string filePath = "../../file.md";
+        public static string filePath = "../../file.md";
 
-        private static string[] options = { "New Game", "Controls", "HighScores", "Choose Difficulty", "Quit" };
+        public static string[] options = { "New Game", "Controls", "HighScores", "Choose Difficulty", "Quit" };
 
-        private static string[] difficultyOptions = { "Recruit", "Regular", "Hardened", "Veteran", "Return to Menu" };
+        public static string[] difficultyOptions = { "Recruit", "Regular", "Hardened", "Veteran", "Return to Menu" };
 
-        private static int upperMenuBorder = 1;
+        public static int upperMenuBorder = 1;
 
-        private static int lowerMenuBorder = 28;
+        public static int lowerMenuBorder = 28;
 
-        private static List<string> liveNumber = new List<string>()
+        public static List<string> liveNumber = new List<string>()
         {
             "\U00000238",
             "\U00000238",
@@ -71,7 +71,7 @@
         };
 
 
-        private static Position[] directions = new Position[]
+        public static Position[] directions = new Position[]
         {
             new Position(1, 0),     //right
             new Position(-1, 0),    // left
@@ -94,7 +94,6 @@
             Console.CursorVisible = false;
             Console.Clear();
             int currentSelection = 0;
-            //level = 1;
             sleep = 150;
             playerPoints = 0;
             oldPlayerPoints = 0;
@@ -240,7 +239,7 @@
             }
             else if (keyPressed.Key == ConsoleKey.Enter)
             {
-                MenuChange.RunMenuOption(currentSelection, level);
+                level = MenuChange.RunMenuOption(currentSelection, level);
             }
 
             return currentSelection;
@@ -250,7 +249,8 @@
         {
             GameSounds.PlayNewGameSound();
             GameSounds.PlayMovingSound();
-            playerPoints = 0;   // Starting player points
+            playerPoints = 0;
+            oldPlayerPoints = 0;// Starting player points
             direction = 0; // 0 right 1 left 2 down 3 up
             Print.StartSnakeElements(snakeElements);
 
@@ -273,7 +273,7 @@
                 if (snakeNewHead.X > Console.WindowWidth - 1 || snakeNewHead.X < 0 ||
                     snakeNewHead.Y < 5 || snakeNewHead.Y > Console.WindowHeight - 1 || snakeElements.Contains(snakeNewHead) || obstacle.Contains(snakeNewHead))
                 {
-                    if (liveNumber.Count >= 1)
+                    if (liveNumber.Count > 1)
                     {
                         GameSounds.PlayDeathSound();
                         liveNumber.Remove(liveNumber[0]);
@@ -297,6 +297,7 @@
                     }
                     else
                     {
+                        level = 1;
                         Console.Clear();
                         GameSounds.PlayDeathSound();
                         Print.PrintData(22, 15, "Game Over!", ConsoleColor.Yellow);
