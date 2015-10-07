@@ -59,9 +59,13 @@ namespace JustSnake
 
         private static string filePath = "../../file.md";
 
-        private static string[] options = { "New Game", "HighScores", "Choose Difficulty", "Quit" };
+        private static string[] options = { "New Game", "Controls", "HighScores", "Choose Difficulty", "Quit" };
 
-        private static string[] difficultyOptions = { "Level 1", "Level 2", "Level 3", "Level 4", "Return" };
+        private static string[] difficultyOptions = { "Recruit", "Regular", "Hardened", "Veteran", "Return to Menu" };
+
+        private static string[] controlsList = { "Move Up", "Move Down", "Move left", "Move Right", "Pause" };
+
+        private static string[] controlsKeys = { "Up Arrow", "Down Arrow", "Left Arrow", "Right Arrow", "Spacebar" };
 
         private static int upperMenuBorder = 1;
 
@@ -69,9 +73,9 @@ namespace JustSnake
 
         private static List<string> liveNumber = new List<string>()
         {
-            "&",
-            "&",
-            "&"
+            "\U00000238",
+            "\U00000238",
+            "\U00000238"
         };
 
 
@@ -98,16 +102,16 @@ namespace JustSnake
             Console.CursorVisible = false;
             Console.Clear();
             int currentSelection = 0;
-            level = 1;
+            //level = 1;
             sleep = 150;
             playerPoints = 0;
             oldPlayerPoints = 0;
 
             liveNumber = new List<string>()
             {
-                "&",
-                "&",
-                "&"
+                "\U00002022",
+                "\U00002022",
+                "\U00002022"
             };
 
             while (true)
@@ -143,7 +147,7 @@ namespace JustSnake
 
                 if (currentSelection < 0)
                 {
-                    currentSelection = 3;
+                    currentSelection = 4;
                 }
             }
             else if (keyPressed.Key == ConsoleKey.Enter)
@@ -162,14 +166,18 @@ namespace JustSnake
             }
             else if (currentSelection == 1)
             {
-                Leaderboard();
+                Controls();
             }
             else if (currentSelection == 2)
+            {
+                Leaderboard();
+            }
+            else if (currentSelection == 3)
             {
                 Console.Clear();
                 LevelsMenu();
             }
-            else if (currentSelection == 3)
+            else if (currentSelection == 4)
             {
                 Console.Clear();
                 SaveFile();
@@ -214,8 +222,16 @@ namespace JustSnake
 
             foreach (var i in difficultyOptions)
             {
-                PrintData(17, printPosition, i, ConsoleColor.White);
-                printPosition++;
+                if (i != "Return to Menu")
+                {
+                    PrintData(17, printPosition, i, ConsoleColor.White);
+                    printPosition++;
+                }
+                else
+                {
+                    PrintData(17, printPosition, i, ConsoleColor.Green);
+                    printPosition++;
+                }
             }
         }
 
@@ -292,7 +308,29 @@ namespace JustSnake
                     leaderboardPoints[i]), ConsoleColor.Yellow);
             }
 
-            PrintData(0, i + 8, "Press any key to continue", ConsoleColor.White);
+            PrintData(0, i + 8, "Press any key to return to Menu", ConsoleColor.White);
+            Console.ReadKey();
+
+            Menu();
+        }
+
+        private static void Controls()
+        {
+            Console.Clear();
+
+            PrintData(0, lowerMenuBorder, new string('-', windowWidth), ConsoleColor.Magenta);
+            PrintData(0, 3, string.Format("{0}{1}", new string(' ', windowWidth / 2 - 6), "Controls"), ConsoleColor.White);
+            PrintData(0, upperMenuBorder, new string('-', windowWidth), ConsoleColor.DarkMagenta);
+
+            int i = 0;
+
+            for (; i < controlsList.Length; i++)
+            {
+                PrintData(0, i + 6, string.Format("\U00002022 {0} [{1}]", controlsList[i].PadRight(18),
+                    controlsKeys[i]), ConsoleColor.Yellow);
+            }
+
+            PrintData(0, i + 8, "Press any key to return to Menu", ConsoleColor.White);
             Console.ReadKey();
 
             Menu();
@@ -584,7 +622,7 @@ namespace JustSnake
             PrintData(0, 0, new string('-', windowWidth));
             PrintData(0, 2, string.Format("{0}{1}", new string(' ', windowWidth / 2 - 5),
                 string.Format("{0}", "JUST SNAKE")), ConsoleColor.Red);
-            PrintData(4, 2, string.Format("{0}", level.ToString()), ConsoleColor.Yellow);
+            PrintData(4, 2, string.Format("Level: {0}", difficultyOptions[level - 1]), ConsoleColor.Yellow);
             PrintData(45, 2, "Score: " + playerPoints, ConsoleColor.Green);
             PrintData(0, 4, new string('-', windowWidth));
         }
@@ -629,6 +667,7 @@ namespace JustSnake
 
         private static void PauseGame()
         {
+            GameSounds.StopMovingSound();
             while (true)
             {
                 PrintData(2, 25, "Menu key - M", ConsoleColor.Blue);
@@ -636,6 +675,7 @@ namespace JustSnake
                 ConsoleKeyInfo unpause = Console.ReadKey();
                 if (unpause.Key == ConsoleKey.Spacebar)
                 {
+                    GameSounds.PlayMovingSound();
                     return;
                 }
                 else if (unpause.Key == ConsoleKey.M)
@@ -757,12 +797,10 @@ namespace JustSnake
             player.Play();
         }
 
-        //public static void PlayEathingSound()
-        //{
-        //    movingplayer.Stop();
-        //    player = new SoundPlayer(@"..\..\sounds\snake_eat.wav");
-        //    player.Play();
-        //}
+        public static void StopMovingSound()
+        {
+            movingplayer.Stop();
+        }
 
         public static void PlayNewGameSound()
         {
