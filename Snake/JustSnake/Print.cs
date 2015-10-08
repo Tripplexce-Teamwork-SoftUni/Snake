@@ -67,7 +67,7 @@
             PrintData(0, 0, new string('-', windowWidth));
             PrintData(0, 2, string.Format("{0}{1}", new string(' ', windowWidth / 2 - 5),
                 string.Format("{0}", "JUST SNAKE")), ConsoleColor.Red);
-            PrintData(4, 2, string.Format("Level: {0}", difficultyOptions[level - 1]), ConsoleColor.Yellow);
+            PrintData(23, 3, string.Format("Level: {0}", difficultyOptions[level - 1]), ConsoleColor.Yellow);
             PrintData(45, 2, "Score: " + playerPoints, ConsoleColor.Green);
             PrintData(0, 4, new string('-', windowWidth));
         }

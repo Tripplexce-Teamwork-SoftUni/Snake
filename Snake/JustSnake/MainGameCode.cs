@@ -313,7 +313,7 @@
 
                 Moving.MoveSnake(windowWidth, difficultyOptions, snakeElements, playerPoints, level);
                 Print.PrintObstacles(level, obstacle);
-                Print.PrintLives(25, 3, "Lives: ", liveNumber);
+                Print.PrintLives(4, 2, "Lives: ", liveNumber);
 
                 if (snakeNewHead.X == food.X && snakeNewHead.Y == food.Y)
                 {
