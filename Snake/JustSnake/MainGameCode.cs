@@ -28,12 +28,12 @@
 
         public static int direction;   // 0 right 1 left 2 down 3 up
 
-        public static string menuIcon = @"    ___         ___     ______           ___        
-      | |         | |    / ____|           | |       
-      | |_   _ ___| |_  | (___  _ __   __ _| | _____ 
-  _   | | | | / __| __|  \___ \| '_ \ / _` | |/ / _ \
- | |__| | |_| \__ \ |_   ____) | | | | (_| |   <  __/
-  \____/ \__,_|___/\__| |_____/|_| |_|\__,_|_|\_\___|
+        public static string menuIcon = @"      ___         ___     ______           ___        
+         | |         | |    / ____|           | |       
+         | |_   _ ___| |_  | (___  _ __   __ _| | _____ 
+     _   | | | | / __| __|  \___ \| '_ \ / _` | |/ / _ \
+    | |__| | |_| \__ \ |_   ____) | | | | (_| |   <  __/
+     \____/ \__,_|___/\__| |_____/|_| |_|\__,_|_|\_\___|
                                                      
                                                      ";
 
@@ -108,7 +108,7 @@
             while (true)
             {
                 Print.PrintData(0, lowerMenuBorder, new string('-', windowWidth), ConsoleColor.Magenta);
-                Print.PrintData(2, 3, menuIcon, ConsoleColor.Magenta);
+                Print.PrintData(3, 3, menuIcon, ConsoleColor.Magenta);
                 Print.PrintData(0, upperMenuBorder, new string('-', windowWidth), ConsoleColor.DarkMagenta);
 
                 Print.PrintOptionsMenu(options, currentSelection);
