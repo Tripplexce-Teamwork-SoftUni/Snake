@@ -317,11 +317,14 @@
 
                 if (snakeNewHead.X == food.X && snakeNewHead.Y == food.Y)
                 {
-                    //GameSounds.PlayMovingSound();
+                    //GameSounds.PlayEatingSound();
                     playerPoints++; // for every food eaten score increases by 1
-                    sleep -= 2; // for every food eaten speed increases by ~2%
+                    if (sleep > 70) // for every food eaten speed increases by ~2%
+                    {
+                        sleep -= 2;
+                    } 
                     food = FoodCanBePrinted(food);
-                    Print.PrintFood(food.X, food.Y, '\U00000298', ConsoleColor.Magenta);
+                    Print.PrintFood(food.X, food.Y, '\U00000238', ConsoleColor.Magenta);
                     snakeElements.Enqueue(snakeNewHead);
 
                     foreach (Position position in snakeElements)
@@ -341,7 +344,7 @@
         {
             if (!snakeElements.Contains(food) && !obstacle.Contains(food))
             {
-                Print.PrintFood(food.X, food.Y, '\U000000AE', ConsoleColor.Magenta);
+                Print.PrintFood(food.X, food.Y, '\U00000238', ConsoleColor.Magenta);
             }
             else
             {
